@@ -97,19 +97,18 @@ class PublicTransportSensor(Entity):
     for departure in self.data['actual']:
       direction = departure['direction']
       _LOGGER.debug("Found route: {}".format(direction))
-      if direction == self.direction:
-        route_id = departure['patternText']
-        time = addSecs(datetime.now(), departure['actualRelativeTime'])
-        _LOGGER.debug("Adding route: {}".format(route_id))
-
-        deps.append({
-          'line': route_id,
-          'direction': direction,
-          'relativeTime': departure['actualRelativeTime'],
-          'time': {
-            'date': time.isoformat()
-          }
-        })
+      if len(deps) < 10:
+          route_id = departure['patternText']
+          time = addSecs(datetime.now(), departure['actualRelativeTime'])
+          _LOGGER.debug("Adding route: {}".format(route_id))
+          deps.append({
+              'line': route_id,
+              'direction': direction,
+              'relativeTime': departure['actualRelativeTime'],
+              'time': {
+                  'date': time.isoformat()
+              }
+          })
 
     return deps
 
